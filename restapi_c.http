@@ -1,0 +1,8 @@
+@restapi_c_HostAddress = http://localhost:5038
+
+GET {{restapi_c_HostAddress}}/weather/
+Accept: application/json
+
+###
+GET {{restapi_c_HostAddress}}/weather/
+Accept: application/json

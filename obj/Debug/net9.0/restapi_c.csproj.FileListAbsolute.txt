@@ -1,0 +1,7 @@
+C:\Users\N208439\Desktop\Workspace\restapi_c\obj\Debug\net9.0\restapi_c.csproj.AssemblyReference.cache
+C:\Users\N208439\Desktop\Workspace\restapi_c\obj\Debug\net9.0\restapi_c.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\N208439\Desktop\Workspace\restapi_c\obj\Debug\net9.0\restapi_c.AssemblyInfoInputs.cache
+C:\Users\N208439\Desktop\Workspace\restapi_c\obj\Debug\net9.0\restapi_c.AssemblyInfo.cs
+C:\Users\N208439\Desktop\Workspace\restapi_c\obj\Debug\net9.0\restapi_c.csproj.CoreCompileInputs.cache
+C:\Users\N208439\Desktop\Workspace\restapi_c\obj\Debug\net9.0\restapi_c.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\N208439\Desktop\Workspace\restapi_c\obj\Debug\net9.0\restapi_c.MvcApplicationPartsAssemblyInfo.cache
