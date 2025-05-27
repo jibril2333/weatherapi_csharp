@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using restapi_c.Interfaces;
-using restapi_c.Services;
 using Microsoft.Extensions.Logging;
 
 namespace restapi_c.Controllers;
