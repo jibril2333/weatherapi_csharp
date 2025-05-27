@@ -26,19 +26,19 @@ public class WeatherController : ControllerBase
 
     // HttpGet特性：标记这是一个处理GET请求的动作方法
     // Name参数：为这个动作指定一个名称，用于生成URL
-    [HttpGet("{city}")]
-    public async Task<IActionResult> Get(string city)
+    [HttpGet(Name = "GetWeatherForecast")]
+    public IActionResult Get()
     {
         // 记录请求时间
-        _logger.LogInformation("Weather forecast requested for {city} at {time}", city, DateTime.UtcNow);
+        _logger.LogInformation("Weather forecast requested at {time}", DateTime.UtcNow);
         
         // 调用天气服务获取预报数据
-        var forecast = await _weatherService.GetForecast(city);
+        var forecast = _weatherService.GetForecast();
         
         // 记录返回的预报数量
-        _logger.LogInformation("Returning {count} weather forecasts for {city}", forecast.Length, city);
+        _logger.LogInformation($"Returning {forecast.Length} weather forecasts");
         
         // 返回200 OK响应，包含预报数据
-        return Ok(new { City = city, Forecast = forecast });
+        return Ok(forecast);
     }
 } 

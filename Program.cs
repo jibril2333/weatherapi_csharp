@@ -13,8 +13,8 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 // 注册服务
-builder.Services.AddScoped<IWeatherService, WeatherService2>(); // 使用新的WeatherService2
-builder.Services.AddHttpClient(); // 注册HttpClient服务。程序可以访问网络
+builder.Services.AddScoped<IWeatherService, WeatherService>();
+builder.Services.AddScoped<ICityService, CityService>();
 
 var app = builder.Build(); // 构建应用程序
 
