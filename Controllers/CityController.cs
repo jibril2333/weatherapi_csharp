@@ -20,8 +20,10 @@ public class CityController : ControllerBase
     [HttpGet]
     public IActionResult Get()
     {
+        _logger.LogInformation("Getting all cities");
         var cities = _cityService.GetCities();
         return Ok(cities);
+        
     }
 
     [HttpGet("{cityName}/weather")]

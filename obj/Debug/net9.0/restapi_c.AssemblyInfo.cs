@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("restapi_c")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c49200643a7559b5def6262af9b5ce124f7238f4")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+be7329adb5877afb1513be074775c75cbcd5e8fb")]
 [assembly: System.Reflection.AssemblyProductAttribute("restapi_c")]
 [assembly: System.Reflection.AssemblyTitleAttribute("restapi_c")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
