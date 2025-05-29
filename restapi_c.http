@@ -11,3 +11,16 @@ Accept: application/json
 ### 获取东京天气
 GET {{restapi_c_HostAddress}}/weather/tokyo
 Accept: application/json
+
+### 获取上海的完整天气数据（当前、小时、每日）
+GET https://api.open-meteo.com/v1/forecast
+?latitude=31.2222
+&longitude=121.4581
+&current_weather=true
+&hourly=temperature_2m,precipitation,precipitation_probability,cloudcover,windspeed_10m,dewpoint_2m,weathercode,apparent_temperature
+&daily=temperature_2m_max,temperature_2m_min,apparent_temperature_max,apparent_temperature_min,precipitation_sum,precipitation_hours,sunrise,sunset,uv_index_max,windgusts_10m_max
+&timezone=Asia/Shanghai
+&temperature_unit=celsius
+&wind_speed_unit=kmh
+&precipitation_unit=mm
+Accept: application/json

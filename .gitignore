@@ -54,4 +54,7 @@ orleans.codegen.cs
 *.pem
 
 # 个人备忘录
-memo.txt 
+memo.txt
+
+# Cursor 相关
+.cursorignore 
