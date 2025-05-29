@@ -22,19 +22,33 @@ public class WeatherService(ILogger<WeatherService> _logger, IHttpClientFactory 
 
     public async Task<(double latitude, double longitude)> GetCityCoordinatesAsync(string cityName = "Tokyo")
     {
-        using var client = _httpClientFactory.CreateClient();
-        string url = $"https://geocoding-api.open-meteo.com/v1/search?name={cityName}&count=1&language=en&format=json";
-        var response = await client.GetAsync(url);
-        response.EnsureSuccessStatusCode(); // 确保请求成功
-        var content = await response.Content.ReadAsStringAsync(); // 读取响应内容
+        try
+        {
+            using var client = _httpClientFactory.CreateClient();
+            string url = $"https://geocoding-api.open-meteo.com/v1/search?name={cityName}&count=1&language=en&format=json";
+            _logger.LogDebug("调用地理编码 API: {Url}", url);
+            
+            var response = await client.GetAsync(url);
+            response.EnsureSuccessStatusCode();
+            var content = await response.Content.ReadAsStringAsync();
 
-        using var json = JsonDocument.Parse(content); // 解析JSON
-        var root = json.RootElement; // 获取根元素
-        var results = root.GetProperty("results").EnumerateArray(); // 获取results元素
-        var firstResult = results.First(); // 获取第一个结果
-        var latitude = firstResult.GetProperty("latitude").GetDouble(); // 获取latitude元素
-        var longitude = firstResult.GetProperty("longitude").GetDouble(); // 获取longitude元素
-        return (latitude, longitude);
+            using var json = JsonDocument.Parse(content);
+            var root = json.RootElement;
+            var results = root.GetProperty("results").EnumerateArray();
+            var firstResult = results.First();
+            var latitude = firstResult.GetProperty("latitude").GetDouble();
+            var longitude = firstResult.GetProperty("longitude").GetDouble();
+            
+            _logger.LogInformation("获取城市 {CityName} 的经纬度: 纬度={Latitude}, 经度={Longitude}", 
+                cityName, latitude, longitude);
+            return (latitude, longitude);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "获取城市 {CityName} 的经纬度失败: {ErrorMessage}", 
+                cityName, ex.Message);
+            throw;
+        }
     }
 
 
@@ -46,39 +60,51 @@ public class WeatherService(ILogger<WeatherService> _logger, IHttpClientFactory 
     /// <returns>天气预报数组</returns>
     public async Task<DailyWeather[]> GetForecastAsync(double latitude = 35.6895, double longitude = 139.6917)
     {
-        _logger.LogInformation("Weather2Service: Generating weather forecast");
-
-        using var client = _httpClientFactory.CreateClient();
-        string url = $"https://api.open-meteo.com/v1/forecast" +
-                     $"?latitude={latitude}&longitude={longitude}" +
-                     $"&daily=temperature_2m_max,temperature_2m_min" +
-                     $"&timezone=Asia%2FTokyo";
-        var response = await client.GetAsync(url);
-        response.EnsureSuccessStatusCode(); // 确保请求成功
-        var content = await response.Content.ReadAsStringAsync(); // 读取响应内容
-
-        using var json = JsonDocument.Parse(content); // 解析JSON
-        var root = json.RootElement; // 获取根元素
-        var daily = root.GetProperty("daily"); // 获取daily元素
-
-        var dates = daily.GetProperty("time").EnumerateArray(); // 获取time元素
-        var maxTemps = daily.GetProperty("temperature_2m_max").EnumerateArray(); // 获取temperature_2m_max元素
-        var minTemps = daily.GetProperty("temperature_2m_min").EnumerateArray(); // 获取temperature_2m_min元素
-
-        var result = new List<DailyWeather>();
-
-        using var dateEnum = dates.GetEnumerator(); // 获取date元素
-        using var maxEnum = maxTemps.GetEnumerator(); // 获取maxTemps元素
-        using var minEnum = minTemps.GetEnumerator(); // 获取minTemps元素
-
-        while (dateEnum.MoveNext() && maxEnum.MoveNext() && minEnum.MoveNext())
+        try
         {
-            result.Add(new DailyWeather(
-                DateOnly.Parse(dateEnum.Current.ToString()),  // 将 JsonElement 转换为 DateOnly
-                maxEnum.Current.GetDouble(),                   // 将 JsonElement 转换为 double
-                minEnum.Current.GetDouble()                    // 将 JsonElement 转换为 double
-            ));
+            using var client = _httpClientFactory.CreateClient();
+            string url = $"https://api.open-meteo.com/v1/forecast" +
+                         $"?latitude={latitude}&longitude={longitude}" +
+                         $"&daily=temperature_2m_max,temperature_2m_min" +
+                         $"&timezone=Asia%2FTokyo";
+            _logger.LogDebug("调用天气预报 API: {Url}", url);
+            
+            var response = await client.GetAsync(url);
+            response.EnsureSuccessStatusCode();
+            var content = await response.Content.ReadAsStringAsync();
+
+            using var json = JsonDocument.Parse(content);
+            var root = json.RootElement;
+            var daily = root.GetProperty("daily");
+
+            var dates = daily.GetProperty("time").EnumerateArray();
+            var maxTemps = daily.GetProperty("temperature_2m_max").EnumerateArray();
+            var minTemps = daily.GetProperty("temperature_2m_min").EnumerateArray();
+
+            var result = new List<DailyWeather>();
+
+            using var dateEnum = dates.GetEnumerator();
+            using var maxEnum = maxTemps.GetEnumerator();
+            using var minEnum = minTemps.GetEnumerator();
+
+            while (dateEnum.MoveNext() && maxEnum.MoveNext() && minEnum.MoveNext())
+            {
+                result.Add(new DailyWeather(
+                    DateOnly.Parse(dateEnum.Current.ToString()),
+                    maxEnum.Current.GetDouble(),
+                    minEnum.Current.GetDouble()
+                ));
+            }
+
+            _logger.LogInformation("获取天气预报数据: 纬度={Latitude}, 经度={Longitude}, 天数={Count}", 
+                latitude, longitude, result.Count);
+            return result.ToArray();
         }
-        return result.ToArray();
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "获取天气预报失败: 纬度={Latitude}, 经度={Longitude}, 错误: {ErrorMessage}", 
+                latitude, longitude, ex.Message);
+            throw;
+        }
     }
 }
