@@ -5,7 +5,7 @@ namespace restapi_c.Interfaces;
 /// <summary>
 /// 天气服务接口 - 第二个版本
 /// </summary>
-public interface IWeather2Service
+public interface IWeatherService
 {
 
     // 获取城市经纬度,用tuple返回

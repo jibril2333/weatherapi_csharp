@@ -11,7 +11,7 @@ namespace restapi_c.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class Weather2Controller(ILogger<Weather2Controller> _logger, IWeather2Service _weather2Service) : ControllerBase
+public class WeatherController(ILogger<WeatherController> _logger, IWeatherService _weatherService) : ControllerBase
 {
     // 你现在可以在类的方法中直接使用 _logger 和 _weather2Service
     [HttpGet("{cityName}")]
@@ -19,8 +19,8 @@ public class Weather2Controller(ILogger<Weather2Controller> _logger, IWeather2Se
     {
         try
         {
-            var (latitude, longitude) = await _weather2Service.GetCityCoordinatesAsync(cityName);
-            var forecast = await _weather2Service.GetForecastAsync(latitude, longitude);
+            var (latitude, longitude) = await _weatherService.GetCityCoordinatesAsync(cityName);
+            var forecast = await _weatherService.GetForecastAsync(latitude, longitude);
             return Ok(forecast);
         }
         catch (Exception ex)

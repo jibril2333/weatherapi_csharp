@@ -13,7 +13,7 @@ namespace restapi_c.Services;
 /// <summary>
 /// 天气服务实现 - 第二个版本
 /// </summary>
-public class Weather2Service(ILogger<Weather2Service> _logger, IHttpClientFactory _httpClientFactory) : IWeather2Service
+public class WeatherService(ILogger<WeatherService> _logger, IHttpClientFactory _httpClientFactory) : IWeatherService
 {
     // private static readonly string[] Summaries = new[]
     // {
