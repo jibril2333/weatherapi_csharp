@@ -1,25 +1,13 @@
 @restapi_c_HostAddress = http://localhost:5038
 
-### 获取天气预报
-GET {{restapi_c_HostAddress}}/weather/
-Accept: application/json
-
-### 获取所有城市列表
-GET {{restapi_c_HostAddress}}/city/
-Accept: application/json
-
-### 获取特定城市的天气
-GET {{restapi_c_HostAddress}}/city/beijing/weather
-Accept: application/json
-
-### 获取上海天气
-GET {{restapi_c_HostAddress}}/city/shanghai/weather
-Accept: application/json
-
-### 获取上海天气
-GET {{restapi_c_HostAddress}}/weather2/shanghai
-Accept: application/json
-
 ### 获取北京天气
-GET {{restapi_c_HostAddress}}/weather2/beijing
+GET {{restapi_c_HostAddress}}/weather/beijing
+Accept: application/json
+
+### 获取上海天气
+GET {{restapi_c_HostAddress}}/weather/shanghai
+Accept: application/json
+
+### 获取东京天气
+GET {{restapi_c_HostAddress}}/weather/tokyo
 Accept: application/json
