@@ -15,6 +15,8 @@ builder.Services.AddSwaggerGen(c =>
 // 注册服务
 builder.Services.AddScoped<IWeatherService, WeatherService>();
 builder.Services.AddScoped<ICityService, CityService>();
+builder.Services.AddHttpClient();  // 注册 IHttpClientFactory
+builder.Services.AddScoped<IWeather2Service, Weather2Service>();  // 注册 Weather2Service
 
 var app = builder.Build(); // 构建应用程序
 
