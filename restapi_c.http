@@ -15,3 +15,11 @@ Accept: application/json
 ### 获取上海天气
 GET {{restapi_c_HostAddress}}/city/shanghai/weather
 Accept: application/json
+
+### 获取上海天气
+GET {{restapi_c_HostAddress}}/weather2/shanghai
+Accept: application/json
+
+### 获取北京天气
+GET {{restapi_c_HostAddress}}/weather2/beijing
+Accept: application/json
