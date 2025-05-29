@@ -10,19 +10,8 @@ namespace restapi_c.Controllers;
 // Route特性：定义控制器的路由模板
 // [controller]会被替换为控制器名称（去掉"Controller"后缀），即"Weather"
 [Route("[controller]")]
-public class WeatherController : ControllerBase
+public class WeatherController(IWeatherService _weatherService, ILogger<WeatherController> _logger) : ControllerBase
 {
-    // 私有只读字段，通过依赖注入获取服务实例
-    private readonly IWeatherService _weatherService;  // 天气服务接口
-    private readonly ILogger<WeatherController> _logger;  // 日志记录器
-
-    // 构造函数：通过依赖注入接收所需的服务
-    public WeatherController(IWeatherService weatherService, ILogger<WeatherController> logger)
-    {
-        _weatherService = weatherService;
-        _logger = logger;
-    }
-
     // HttpGet特性：标记这是一个处理GET请求的动作方法
     // Name参数：为这个动作指定一个名称，用于生成URL
     [HttpGet(Name = "GetWeatherForecast")]

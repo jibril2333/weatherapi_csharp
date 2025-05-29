@@ -1,22 +1,15 @@
 using Microsoft.AspNetCore.Mvc;
 using restapi_c.Interfaces;
 using Microsoft.Extensions.Logging;
+using System.Net.Http;
+using System.Text.Json;
 
 namespace restapi_c.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class CityController : ControllerBase
+public class CityController(ICityService _cityService, ILogger<CityController> _logger, IHttpClientFactory _httpClientFactory) : ControllerBase
 {
-    private readonly ICityService _cityService;
-    private readonly ILogger<CityController> _logger;
-
-    public CityController(ICityService cityService, ILogger<CityController> logger)
-    {
-        _cityService = cityService;
-        _logger = logger;
-    }
-
     [HttpGet]
     public IActionResult Get()
     {
@@ -40,6 +33,7 @@ public class CityController : ControllerBase
         _logger.LogInformation("Getting weather for city: {CityName}", cityName);
         
         // 3. 获取天气数据
+        using var client = _httpClientFactory.CreateClient();
         var weather = _cityService.GetCityWeather(cityName);
         
         // 4. 返回天气数据
