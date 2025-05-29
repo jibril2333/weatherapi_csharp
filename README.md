@@ -40,21 +40,25 @@ A RESTful API service built with ASP.NET Core that provides real-time weather in
 ### Installation
 
 1. Clone the repository
+
 ```bash
-git clone [repository-url]
+git clone https://github.com/jibril2333/weatherapi_csharp.git
 ```
 
 2. Navigate to the project directory
+
 ```bash
 cd restapi_c
 ```
 
 3. Restore dependencies
+
 ```bash
 dotnet restore
 ```
 
 4. Run the application
+
 ```bash
 dotnet run
 ```
@@ -64,6 +68,7 @@ The API will be available at `http://localhost:5038`
 ### API Documentation
 
 Once the application is running, you can access the Swagger documentation at:
+
 - Swagger UI: `http://localhost:5038/swagger`
 - OpenAPI JSON: `http://localhost:5038/swagger/v1/swagger.json`
 
@@ -85,4 +90,4 @@ Once the application is running, you can access the Swagger documentation at:
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details. 
+This project is licensed under the MIT License - see the LICENSE file for details.
