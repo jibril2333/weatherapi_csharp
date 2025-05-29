@@ -16,6 +16,8 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddHttpClient();  // 注册 IHttpClientFactory
 builder.Services.AddScoped<IWeatherService, WeatherService>();  // 注册 Weather2Service
 
+
+
 var app = builder.Build(); // 构建应用程序
 
 // Configure the HTTP request pipeline.
