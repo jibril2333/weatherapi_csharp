@@ -27,8 +27,7 @@ public class WeatherController(ILogger<WeatherController> _logger, IWeatherServi
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "获取城市 {CityName} 的天气数据失败: {ErrorMessage}", 
-                cityName, ex.Message);
+            _logger.LogError(ex, "获取城市 {CityName} 的天气数据失败: {ErrorMessage}", cityName, ex.Message);
             return StatusCode(500, $"获取城市 {cityName} 的天气数据失败: {ex.Message}");
         }
     }
