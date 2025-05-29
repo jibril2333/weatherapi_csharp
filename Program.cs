@@ -1,6 +1,7 @@
 using Microsoft.OpenApi.Models;
 using restapi_c.Interfaces;
 using restapi_c.Services;
+using restapi_c.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +16,10 @@ builder.Services.AddSwaggerGen(c =>
 // 注册服务
 builder.Services.AddHttpClient();  // 注册 IHttpClientFactory
 builder.Services.AddScoped<IWeatherService, WeatherService>();  // 注册 Weather2Service
+builder.Services.AddScoped<IChatService, ChatService>();  // 注册 ChatService
+
+// 配置 API 设置
+builder.Services.Configure<ApiSettings>(builder.Configuration.GetSection("ApiSettings"));
 
 
 

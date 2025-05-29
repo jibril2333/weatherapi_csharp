@@ -1,4 +1,5 @@
 @restapi_c_HostAddress = http://localhost:5038
+@openaiApiKey = {{$dotenv OPENAI_API_KEY}}
 
 ### 获取北京天气
 GET {{restapi_c_HostAddress}}/weather/beijing
@@ -24,3 +25,32 @@ GET https://api.open-meteo.com/v1/forecast
 &wind_speed_unit=kmh
 &precipitation_unit=mm
 Accept: application/json
+
+### 获取 OpenAI 模型列表
+GET https://api.openai.com/v1/models
+Authorization: Bearer {{openaiApiKey}}
+Accept: application/json
+
+### 测试聊天功能 - 简单问候
+POST {{restapi_c_HostAddress}}/chat
+Content-Type: application/json
+
+{
+    "message": "你好，请介绍一下自己"
+}
+
+### 测试聊天功能 - 天气相关
+POST {{restapi_c_HostAddress}}/chat
+Content-Type: application/json
+
+{
+    "message": "今天北京的天气怎么样？"
+}
+
+### 测试聊天功能 - 复杂问题
+POST {{restapi_c_HostAddress}}/chat
+Content-Type: application/json
+
+{
+    "message": "请分析一下最近一周北京的天气趋势，并给出穿衣建议"
+}
