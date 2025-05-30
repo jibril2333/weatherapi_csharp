@@ -6,19 +6,12 @@ namespace restapi_c.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class ChatController : ControllerBase
+public class ChatController(IChatService chatService) : ControllerBase
 {
-    private readonly IChatService _chatService;
-
-    public ChatController(IChatService chatService)
-    {
-        _chatService = chatService;
-    }
-
     [HttpPost]
     public async Task<IActionResult> Post(ChatRequest request)
     {
-        var response = await _chatService.GetChatResponseAsync(request.Message);
+        var response = await chatService.GetChatResponseAsync(request.Message);
         return Ok(new { response });
     }
 }

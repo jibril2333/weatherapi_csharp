@@ -20,8 +20,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 // 配置 API 设置
 var apiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY");
-Console.WriteLine($"API Key 长度: {apiKey?.Length ?? 0}");
-Console.WriteLine($"API Key 前4位: {(apiKey?.Length > 4 ? apiKey[..4] : "N/A")}");
 
 if (string.IsNullOrEmpty(apiKey))
 {

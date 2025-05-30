@@ -8,34 +8,25 @@ using Microsoft.Extensions.Logging;
 
 namespace restapi_c.Services;
 
-public class ChatService : IChatService
+public class ChatService(
+    IHttpClientFactory httpClientFactory,
+    IOptions<ApiSettings> apiSettings,
+    ILogger<ChatService> logger) : IChatService
 {
-    private readonly IHttpClientFactory _httpClientFactory;
-    private readonly ApiSettings _apiSettings;
-    private readonly ILogger<ChatService> _logger;
-
-    public ChatService(
-        IHttpClientFactory httpClientFactory,
-        IOptions<ApiSettings> apiSettings,
-        ILogger<ChatService> logger)
-    {
-        _httpClientFactory = httpClientFactory;
-        _apiSettings = apiSettings.Value;
-        _logger = logger;
-    }
+    private readonly ApiSettings _apiSettings = apiSettings.Value;
 
     public async Task<string> GetChatResponseAsync(string userInput)
     {
         try
         {
-            using var client = _httpClientFactory.CreateClient();
+            using var client = httpClientFactory.CreateClient();
             
             if (string.IsNullOrEmpty(_apiSettings.ApiKey))
             {
                 throw new InvalidOperationException("API Key 未设置");
             }
 
-            _logger.LogInformation("使用 API Key 长度: {Length}", _apiSettings.ApiKey.Length);
+            logger.LogInformation("使用 API Key 长度: {Length}", _apiSettings.ApiKey.Length);
             client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _apiSettings.ApiKey);
 
             var requestBody = new
@@ -48,7 +39,7 @@ public class ChatService : IChatService
             };
 
             var jsonContent = JsonSerializer.Serialize(requestBody);
-            _logger.LogDebug("请求体: {RequestBody}", jsonContent);
+            logger.LogDebug("请求体: {RequestBody}", jsonContent);
 
             var response = await client.PostAsync(
                 "https://api.openai.com/v1/chat/completions",
@@ -58,7 +49,7 @@ public class ChatService : IChatService
             if (!response.IsSuccessStatusCode)
             {
                 var errorContent = await response.Content.ReadAsStringAsync();
-                _logger.LogError("API 调用失败: {StatusCode}, {ErrorContent}", response.StatusCode, errorContent);
+                logger.LogError("API 调用失败: {StatusCode}, {ErrorContent}", response.StatusCode, errorContent);
                 throw new HttpRequestException($"API 调用失败: {response.StatusCode}, {errorContent}");
             }
 
@@ -73,7 +64,7 @@ public class ChatService : IChatService
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "调用 OpenAI API 时发生错误: {Message}", ex.Message);
+            logger.LogError(ex, "调用 OpenAI API 时发生错误: {Message}", ex.Message);
             throw;
         }
     }
