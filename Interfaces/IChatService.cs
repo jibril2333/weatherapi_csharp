@@ -1,7 +1,6 @@
-namespace restapi_c.Interfaces
+namespace restapi_c.Interfaces;
+
+public interface IChatService
 {
-    public interface IChatService
-    {
-        Task<string> GetChatResponseAsync(string userInput);
-    }
+    Task<string> GetChatResponseAsync(string userInput);
 }

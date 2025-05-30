@@ -22,23 +22,21 @@ public class ChatService : IChatService
         _httpClientFactory = httpClientFactory;
         _apiSettings = apiSettings.Value;
         _logger = logger;
-        
-        // 记录配置信息
-        _logger.LogInformation("API Key 长度: {Length}", _apiSettings.ApiKey?.Length ?? 0);
-        _logger.LogInformation("Model: {Model}", _apiSettings.Model);
     }
 
     public async Task<string> GetChatResponseAsync(string userInput)
     {
         try
         {
-            _logger.LogInformation("开始处理用户输入: {UserInput}", userInput);
-            
             using var client = _httpClientFactory.CreateClient();
-            var authHeader = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _apiSettings.ApiKey);
-            client.DefaultRequestHeaders.Authorization = authHeader;
             
-            _logger.LogDebug("Authorization Header: {Header}", authHeader.ToString());
+            if (string.IsNullOrEmpty(_apiSettings.ApiKey))
+            {
+                throw new InvalidOperationException("API Key 未设置");
+            }
+
+            _logger.LogInformation("使用 API Key 长度: {Length}", _apiSettings.ApiKey.Length);
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _apiSettings.ApiKey);
 
             var requestBody = new
             {
@@ -52,23 +50,18 @@ public class ChatService : IChatService
             var jsonContent = JsonSerializer.Serialize(requestBody);
             _logger.LogDebug("请求体: {RequestBody}", jsonContent);
 
-            var content = new StringContent(
-                jsonContent,
-                Encoding.UTF8,
-                "application/json");
-
             var response = await client.PostAsync(
                 "https://api.openai.com/v1/chat/completions",
-                content);
+                new StringContent(jsonContent, Encoding.UTF8, "application/json")
+            );
 
             if (!response.IsSuccessStatusCode)
             {
                 var errorContent = await response.Content.ReadAsStringAsync();
-                _logger.LogError("API 调用失败: {StatusCode}, {ErrorContent}", 
-                    response.StatusCode, errorContent);
+                _logger.LogError("API 调用失败: {StatusCode}, {ErrorContent}", response.StatusCode, errorContent);
+                throw new HttpRequestException($"API 调用失败: {response.StatusCode}, {errorContent}");
             }
 
-            response.EnsureSuccessStatusCode();
             var responseBody = await response.Content.ReadAsStringAsync();
             var responseObject = JsonSerializer.Deserialize<JsonElement>(responseBody);
 
