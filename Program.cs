@@ -20,17 +20,26 @@ var builder = WebApplication.CreateBuilder(args);
 
 // 配置 API 设置
 var apiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY");
+var apiSettings = builder.Configuration.GetSection("ApiSettings").Get<ApiSettings>();
 
 if (string.IsNullOrEmpty(apiKey))
 {
     Console.WriteLine("警告: OPENAI_API_KEY 环境变量为空");
 }
 
-var apiSettings = new ApiSettings
+if (apiSettings == null)
 {
-    ApiKey = apiKey ?? string.Empty,
-    Model = "gpt-3.5-turbo"
-};
+    apiSettings = new ApiSettings
+    {
+        ApiKey = apiKey ?? string.Empty,
+        Model = "gpt-3.5-turo" // 默认值
+    };
+}
+else
+{
+    apiSettings.ApiKey = apiKey ?? string.Empty;
+}
+
 builder.Services.Configure<ApiSettings>(options =>
 {
     options.ApiKey = apiSettings.ApiKey;
@@ -39,7 +48,7 @@ builder.Services.Configure<ApiSettings>(options =>
 
 // Add services to the container.
 builder.Services.AddControllers(); //注册控制器，用于处理HTTP请求。
-builder.Services.AddEndpointsApiExplorer(); //注册API探索器，用于生成API文档。可能不需要
+builder.Services.AddEndpointsApiExplorer(); //注册API探索器，用于生成API文档。不用Swagger的话可能不需要
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Weather API", Version = "v1" });
