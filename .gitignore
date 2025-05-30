@@ -58,3 +58,5 @@ memo.txt
 
 # Cursor 相关
 .cursorignore 
+
+.env
